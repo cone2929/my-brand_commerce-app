@@ -1,0 +1,18 @@
+2025/09/17-01:21:45.264 57bc Reusing MANIFEST C:\Users\USER\Desktop\PythonWorkspace\my-brand_commerce-app\chrome-user-data\Default\Local Storage\leveldb/MANIFEST-000001
+2025/09/17-01:21:45.268 57bc Recovering log #22
+2025/09/17-01:21:45.271 57bc Reusing old log C:\Users\USER\Desktop\PythonWorkspace\my-brand_commerce-app\chrome-user-data\Default\Local Storage\leveldb/000022.log 
+2025/09/17-01:22:21.076 5a2c Level-0 table #26: started
+2025/09/17-01:22:21.085 5a2c Level-0 table #26: 13016 bytes OK
+2025/09/17-01:22:21.090 5a2c Delete type=0 #22
+2025/09/17-01:22:45.290 5a2c Level-0 table #28: started
+2025/09/17-01:22:45.298 5a2c Level-0 table #28: 13010 bytes OK
+2025/09/17-01:22:45.305 5a2c Delete type=0 #25
+2025/09/17-01:22:45.305 5a2c Compacting 4@0 + 1@1 files
+2025/09/17-01:22:45.313 5a2c Generated table #29@0: 12 keys, 25988 bytes
+2025/09/17-01:22:45.313 5a2c Compacted 4@0 + 1@1 files => 25988 bytes
+2025/09/17-01:22:45.315 5a2c compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/09/17-01:22:45.316 5a2c Delete type=2 #18
+2025/09/17-01:22:45.316 5a2c Delete type=2 #21
+2025/09/17-01:22:45.316 5a2c Delete type=2 #23
+2025/09/17-01:22:45.316 5a2c Delete type=2 #26
+2025/09/17-01:22:45.316 5a2c Delete type=2 #28

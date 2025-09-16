@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네이버 쇼핑 크롤링 결과 - 2025년 09월 17일 01:22:50</title>
+    <style>
+
+        :root {
+            --bg: #0a0b10;
+            --surface: rgba(18, 20, 28, 0.85);
+            --card: rgba(20, 22, 30, 0.65);
+            --card-border: rgba(255,255,255,0.08);
+            --text: #e9ecf5;
+            --muted: #9aa3b2;
+            --primary: #8aa8ff;
+            --primary-600: #6a8cff;
+            --accent: #e6c06b; /* premium gold */
+            --success: #30d69a;
+            --danger: #ff6b88;
+            --ring: rgba(230,192,107,0.35);
+            --shadow: 0 12px 40px rgba(0,0,0,0.45);
+            --glass: saturate(1.2) blur(10px);
+        }
+        [data-theme="light"] {
+            --bg: #f5f6fb;
+            --surface: rgba(255,255,255,0.9);
+            --card: rgba(255,255,255,0.75);
+            --card-border: rgba(0,0,0,0.06);
+            --text: #141925;
+            --muted: #667085;
+            --primary: #5c7dff;
+            --primary-600: #4b6cff;
+            --accent: #b0892f; /* warm gold */
+            --success: #17b26a;
+            --danger: #e54861;
+            --ring: rgba(92,125,255,0.25);
+            --shadow: 0 14px 34px rgba(20,24,40,0.08);
+            --glass: saturate(1.1) blur(8px);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            font-family: ui-sans-serif, 'Segoe UI', 'Malgun Gothic', Pretendard, Roboto, Arial, sans-serif;
+            background:
+                radial-gradient(1000px 700px at 100% -10%, rgba(118,92,255,0.22), transparent 60%),
+                radial-gradient(1000px 700px at -10% 110%, rgba(230,192,107,0.20), transparent 60%),
+                var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: 28px;
+        }
+        .container { max-width: 1480px; margin: 0 auto; position: relative; }
+        .container::before {
+            content: ""; position: absolute; inset: -60px; z-index: -1;
+            background: radial-gradient(800px 500px at 10% -10%, rgba(90, 200, 250, 0.08), transparent 55%),
+                        radial-gradient(900px 560px at 110% 110%, rgba(255, 220, 155, 0.08), transparent 50%);
+            pointer-events: none;
+        }
+        .header {
+            background: var(--surface);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 28px 26px;
+            box-shadow: var(--shadow);
+            backdrop-filter: var(--glass);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::after {
+            content: "";
+            position: absolute; inset: 0; z-index: 0;
+            background: radial-gradient(300px 120px at 85% 0%, rgba(230,192,107,0.12), transparent 60%),
+                        radial-gradient(280px 120px at 10% 100%, rgba(138,168,255,0.12), transparent 60%);
+        }
+        .header > * { position: relative; z-index: 1; }
+        .header h1 { font-size: 30px; letter-spacing: -0.3px; margin-bottom: 8px; font-weight: 900; }
+        .header .subtitle { color: var(--muted); font-size: 14px; }
+        .header .instructions {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 14px;
+            padding: 12px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+            border: 1px dashed var(--card-border);
+            border-radius: 12px;
+        }
+        .stats {
+            display: flex; justify-content: center; align-items: center;
+            gap: 12px; margin-top: 18px; flex-wrap: wrap;
+        }
+        .stat-item {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.10);
+        }
+        .stat-item.highlight {
+            background: linear-gradient(180deg, rgba(230,192,107,0.16), rgba(230,192,107,0.06));
+            border-color: rgba(230,192,107,0.45);
+            color: var(--accent);
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px; margin-top: 22px;
+        }
+        /* 카드 - 프리미엄 글래스 모피즘 */
+        .product-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.16);
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+            cursor: pointer; position: relative; border-width: 2px; border-style: solid; border-color: transparent;
+            backdrop-filter: var(--glass);
+        }
+        .product-card::before {
+            content: ""; position: absolute; inset: 0; pointer-events: none;
+            background: radial-gradient(300px 120px at 90% 10%, rgba(138,168,255,0.08), transparent 60%);
+        }
+        .product-card:hover { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(0,0,0,0.22); }
+        .product-card.selected { border-color: var(--accent); box-shadow: 0 18px 40px rgba(230,192,107,0.32); transform: translateY(-2px); }
+        .product-card.selected::after { content: '✓'; position: absolute; top: 10px; right: 10px; background: var(--accent); color: #0e1118; width: 28px; height: 28px; border-radius: 999px; display: flex; align-items: center; justify-content: center; font-weight: 900; z-index: 10; }
+        .product-image { width: 100%; height: 200px; object-fit: contain; background: rgba(0,0,0,0.04); padding: 10px; }
+        .product-info { padding: 14px; }
+        .product-mall { color: var(--primary); font-size: 12px; margin-bottom: 6px; font-weight: 900; letter-spacing: .2px; }
+        .product-title { font-size: 14px; font-weight: 900; color: var(--text); margin-bottom: 10px; line-height: 1.35; display: block; white-space: normal; word-break: break-word; overflow-wrap: anywhere; min-height: 0; }
+        .product-price { font-size: 18px; font-weight: 900; color: var(--danger); margin-bottom: 6px; }
+        .product-delivery { font-size: 12px; color: var(--success); font-weight: 900; }
+        .product-delivery.paid { color: var(--muted); }
+        .no-image { width: 100%; height: 200px; background: rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 13px; }
+        /* 고정 액션 버튼 */
+        .floating-btn { position: fixed; bottom: 26px; right: 26px; background: linear-gradient(135deg, var(--primary-600), var(--primary)); color: white; padding: 12px 18px; border-radius: 999px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(79,124,255,0.35); text-decoration: none; z-index: 1000; border: 0; transition: transform .15s ease, box-shadow .2s ease; }
+        .floating-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 16px 40px rgba(79,124,255,0.45); }
+        .highlight-toggle-btn { position: fixed; bottom: 82px; right: 26px; background: linear-gradient(135deg, #f7d37b, var(--accent)); color: #101828; padding: 12px 18px; border-radius: 999px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(230,192,107,0.35); border: none; z-index: 1000; transition: transform .15s ease, opacity .2s ease, box-shadow .2s ease; }
+        .highlight-toggle-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 16px 40px rgba(230,192,107,0.45); }
+        .highlight-toggle-btn.off { opacity: .85; filter: saturate(.6); }
+        .csv-export-btn { position: fixed; bottom: 138px; right: 26px; background: linear-gradient(135deg, #26dfaa, var(--success)); color: #071911; padding: 12px 18px; border-radius: 999px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(23,178,106,0.35); border: none; z-index: 1000; transition: transform .15s ease, box-shadow .2s ease; }
+        .csv-export-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 16px 40px rgba(23,178,106,0.45); }
+        .theme-toggle-btn { position: fixed; bottom: 26px; left: 26px; background: var(--card); border: 1px solid var(--card-border); color: var(--text); padding: 10px 14px; border-radius: 999px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.12); z-index: 1000; }
+        .delete-info { position: fixed; top: 20px; right: 20px; background: rgba(230,192,107,0.15); color: var(--text); padding: 12px 14px; border-radius: 12px; border: 1px solid var(--card-border); font-weight: 900; z-index: 1000; display: none; backdrop-filter: blur(6px); }
+        /* 필터 컨트롤 - 세그먼티드 스타일 */
+        .filter-controls { display: flex; gap: 8px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+        .filter-btn {
+            background: var(--card); color: var(--text); border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 999px; cursor: pointer;
+            font-weight: 900; font-size: 12px; letter-spacing: .2px; transition: all 0.15s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        .filter-btn:hover { transform: translateY(-1px); }
+        .filter-btn.selected { background: rgba(230,192,107,0.16); border-color: var(--ring); color: var(--text); box-shadow: 0 8px 18px rgba(230,192,107,0.18); }
+        /* 하이라이트 스타일 - 프리미엄 언더라인 */
+        .highlight { background: none; color: inherit !important; font-weight: 900 !important; box-shadow: inset 0 -0.35em 0 rgba(230,192,107,0.45); }
+        .no-highlight .highlight { background: none !important; box-shadow: none !important; font-weight: inherit !important; }
+        /* 매칭 카드 강조 */
+        .product-card.matched { border-color: rgba(230,192,107,0.85); box-shadow: 0 14px 32px rgba(230,192,107,0.22); }
+        @media (max-width: 860px) { .csv-export-btn { right: 22px; bottom: 140px; } .highlight-toggle-btn { right: 22px; bottom: 84px; } .floating-btn { right: 22px; bottom: 28px; } }
+
+        /* CSS 애니메이션 */
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.9); }
+        }
+    
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛍️ 네이버 쇼핑 크롤링 결과</h1>
+            <div class="subtitle">크롤링 시간: 2025년 09월 17일 01:22:50</div>
+            <div class="instructions">💡 상품 카드를 클릭해 선택한 뒤 Delete 키로 제거합니다. 하이라이트는 키워드 매칭 부분을 표시합니다. ⌨️ H: 하이라이트 토글 · ESC: 선택 해제 · Ctrl+A: 현재 보이는 카드 전체 선택</div>
+            <div class="stats"> 
+                <div class="stat-item" id="total-count">총 상품 수: 21개</div>
+                <div class="stat-item">이미지 수집: 21개</div>
+                <div class="stat-item highlight">키워드 매칭: 6개</div>
+                <div class="stat-item highlight">추출 키워드: 4899개</div>
+                <div class="stat-item">크롤링 ID: 20250917_012250</div>
+            </div>
+            <div class="filter-controls">
+    <button class="filter-btn selected" id="filter-all" onclick="setFilterMode('all')">전체 보기 (1)</button>
+    <button class="filter-btn" id="filter-on" onclick="setFilterMode('on')">하이라이트 ON만 (2)</button>
+    <button class="filter-btn" id="filter-off" onclick="setFilterMode('off')">하이라이트 OFF만 (3)</button>
+</div>
+        </div>
+        <div class="delete-info" id="delete-info">선택된 상품: <span id="selected-count">0</span>개 | Delete 키로 삭제</div>
+        <div class="products-grid" id="products-grid">
+
+            <div class="product-card" data-product-id="0" data-matched="0" data-price="29900" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8780370/87803707904.11.jpg?type=f300" alt="클룹 애사비소다 500ml 24개입 5종 (사과 외 택 1)" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">클룹</div>
+                    <div class="product-title">클룹 애사비소다 500ml 24개입 5종 (사과 외 택 1)</div>
+                    <div class="product-price">29,900원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card matched" data-product-id="1" data-matched="1" data-price="36900" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8821378/88213780564.5.jpg?type=f300" alt="[CJ 추석 선물세트] 스팸 6호 네이버 에디션" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall"><span class="highlight">CJ제일제당</span></div>
+                    <div class="product-title">[CJ 추석 선물세트] 스팸 6호 네이버 <span class="highlight">에디션</span></div>
+                    <div class="product-price">36,900원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card matched" data-product-id="2" data-matched="1" data-price="18700" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8766469/87664693478.21.jpg?type=f300" alt="[네이버단독] 오설록 티 베리에이션 30 선물세트 (6종x5입)" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall"><span class="highlight">오설록</span> 본사직영몰</div>
+                    <div class="product-title">[네이버단독] <span class="highlight">오설록</span> 티 베리에이션 30 선물세트 (6종x5입)</div>
+                    <div class="product-price">18,700원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card matched" data-product-id="3" data-matched="1" data-price="158750" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8629716/86297166730.6.jpg?type=f300" alt="브루아오로 리미티드에디션 유기농 폴리페놀 엑스트라버진 올리브오일 750ml" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">아세이떼바오스샵</div>
+                    <div class="product-title">브루아오로 리미티드<span class="highlight">폴리</span> 유기농 <span class="highlight">에디션</span>페놀 엑스트라버진 올리브오일 750ml</div>
+                    <div class="product-price">158,750원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="4" data-matched="0" data-price="37400" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8656321/86563210892.1.jpg?type=f300" alt="대한명인 떡집 백년화편 옛날밥알 쑥떡 해풍쑥떡 1박스 32개입 인절미 개별포장떡" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">백년화편</div>
+                    <div class="product-title">대한명인 떡집 백년화편 옛날밥알 쑥떡 해풍쑥떡 1박스 32개입 인절미 개별포장떡</div>
+                    <div class="product-price">37,400원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card matched" data-product-id="5" data-matched="1" data-price="12600" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_1339347/13393470176.13.jpg?type=f300" alt="[본사직영]오설록 그린티 랑드샤 10입" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall"><span class="highlight">오설록</span> 본사직영몰</div>
+                    <div class="product-title">[본사직영]<span class="highlight">린</span> 그<span class="highlight">오설록</span>티 랑드샤 10입</div>
+                    <div class="product-price">12,600원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="6" data-matched="0" data-price="29960" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8696885/86968851508.32.jpg?type=f300" alt="[포스트] 그래놀라 크랜베리 아몬드 570g+블루베리 500g+카카오호두 510g+고급우드스푼" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">포스트 공식 브랜드스토어</div>
+                    <div class="product-title">[포스트] 그래놀라 크랜베리 아몬드 570g+블루베리 500g+카카오호두 510g+고급우드스푼</div>
+                    <div class="product-price">29,960원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="7" data-matched="0" data-price="239040" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8981871/89818712881.3.jpg?type=f300" alt="청정원 추석 선물세트 행복N2호, 10+2개" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">청정원 공식스토어</div>
+                    <div class="product-title">청정원 추석 선물세트 행복N2호, 10+2개</div>
+                    <div class="product-price">239,040원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="8" data-matched="0" data-price="129540" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8821436/88214367074.5.jpg?type=f300" alt="청정원 추석 선물세트 행복N호, 5+1개" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">청정원 공식스토어</div>
+                    <div class="product-title">청정원 추석 선물세트 행복N호, 5+1개</div>
+                    <div class="product-price">129,540원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="9" data-matched="0" data-price="47500" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8780199/87801998441.3.jpg?type=f300" alt="[미소] 몬스터 킹 갈비찜 2.5kg" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">미소몰 MEASOMALL</div>
+                    <div class="product-title">[미소] 몬스터 킹 갈비찜 2.5kg</div>
+                    <div class="product-price">47,500원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="10" data-matched="0" data-price="259080" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8821469/88214690352.5.jpg?type=f300" alt="청정원 추석 선물세트 행복N호, 10+2개" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">청정원 공식스토어</div>
+                    <div class="product-title">청정원 추석 선물세트 행복N호, 10+2개</div>
+                    <div class="product-price">259,080원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="11" data-matched="0" data-price="119520" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8981870/89818709763.2.jpg?type=f300" alt="청정원 추석 선물세트 행복N2호, 5+1개" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">청정원 공식스토어</div>
+                    <div class="product-title">청정원 추석 선물세트 행복N2호, 5+1개</div>
+                    <div class="product-price">119,520원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="12" data-matched="0" data-price="45000" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8533855/85338553345.jpg?type=f300" alt="[선물세트] 전남 목포 명가다온당 수제 미니 약과세트 전통과자 수제약과" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">인생식탁</div>
+                    <div class="product-title">[선물세트] 전남 목포 명가다온당 수제 미니 약과세트 전통과자 수제약과</div>
+                    <div class="product-price">45,000원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="13" data-matched="0" data-price="25900" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8821298/88212981120.2.jpg?type=f300" alt="청정원 추석 선물세트 행복N호, 1개" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">청정원 공식스토어</div>
+                    <div class="product-title">청정원 추석 선물세트 행복N호, 1개</div>
+                    <div class="product-price">25,900원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="14" data-matched="0" data-price="37050" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8778873/87788734309.1.jpg?type=f300" alt="[바샤커피] 아이 러브 파리 커피 드립백 (12개입)" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">바샤커피공식몰</div>
+                    <div class="product-title">[바샤커피] 아이 러브 파리 커피 드립백 (12개입)</div>
+                    <div class="product-price">37,050원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="15" data-matched="0" data-price="23900" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8969869/89698693849.1.jpg?type=f300" alt="청정원 추석 선물세트 행복N2호, 1개" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">청정원 공식스토어</div>
+                    <div class="product-title">청정원 추석 선물세트 행복N2호, 1개</div>
+                    <div class="product-price">23,900원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card matched" data-product-id="16" data-matched="1" data-price="60000" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8337804/83378042089.4.jpg?type=f300" alt="[포인트추가적립] 목우촌 행복마루 수제햄 선물세트 (쇼핑백포함)" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall"><span class="highlight">목우촌</span></div>
+                    <div class="product-title">[포인트추가적립] <span class="highlight">목우촌</span> 행복마루 수제햄 선물세트 (쇼핑백포함)</div>
+                    <div class="product-price">60,000원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card matched" data-product-id="17" data-matched="1" data-price="36000" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8610555/86105556487.1.jpg?type=f300" alt="장어탕 밀키트 순살 3팩 보양식 국내산 기력회복 1kg" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">고향노을</div>
+                    <div class="product-title">장어탕 밀키트 순살 3팩 <span class="highlight">보양</span>식 국내산 기력회복 1kg</div>
+                    <div class="product-price">36,000원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="18" data-matched="0" data-price="67500" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8971651/89716517387.jpg?type=f300" alt="[선물세트] 상하농원 햄공방 시그니처 세트" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">상하농원 공식스토어</div>
+                    <div class="product-title">[선물세트] 상하농원 햄공방 시그니처 세트</div>
+                    <div class="product-price">67,500원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="19" data-matched="0" data-price="11900" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8951786/89517861647.1.jpg?type=f300" alt="[북촌손만두] 피냉면 2인분 + 진짜잡채 튀김만두" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">북촌손만두</div>
+                    <div class="product-title">[북촌손만두] 피냉면 2인분 + 진짜잡채 튀김만두</div>
+                    <div class="product-price">11,900원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+            <div class="product-card" data-product-id="20" data-matched="0" data-price="11480" data-delivery="0" onclick="toggleSelection(this)">
+                <img src="https://shopping-phinf.pstatic.net/main_8887403/88874032091.4.jpg?type=f300" alt="[신제품] 청정원 한우불고기 양념 250g 외 1종 총2개" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="no-image" style="display:none;">이미지 없음</div>
+                <div class="product-info">
+                    <div class="product-mall">청정원 공식스토어</div>
+                    <div class="product-title">[신제품] 청정원 한우불고기 양념 250g 외 1종 총2개</div>
+                    <div class="product-price">11,480원</div>
+                    <div class="product-delivery">무료배송</div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+    <a href="#" class="floating-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">↑ TOP</a>
+    <button class="highlight-toggle-btn" id="highlight-toggle" onclick="toggleHighlight()">하이라이트 ON</button>
+    <button class="csv-export-btn" id="csv-export" onclick="exportVisibleToCSV()">CSV 다운로드</button>
+    <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()">🌓 테마</button>
+    
+    <script>
+        let selectedCards = new Set();
+        let highlightEnabled = true;
+    let filterMode = 'all'; // 'all' | 'on' | 'off'
+        // 테마 토글 유지
+        (function(){
+            try {
+                const saved = localStorage.getItem('theme');
+                if (saved === 'dark' || saved === 'light') {
+                    document.documentElement.setAttribute('data-theme', saved);
+                }
+            } catch (e) {}
+        })();
+
+        // 화면 가시성 판단 함수들
+        function isCardVisible(card) {
+            // display:none 이거나 DOM에서 보이지 않으면 제외
+            return card && card.offsetParent !== null && card.style.display !== 'none';
+        }
+
+        // 현재 페이지(필터 적용 후 보이는 모든 카드) 전체 선택
+        function selectAllPageCards() {
+            const cards = document.querySelectorAll('.product-card');
+            let changed = 0;
+            cards.forEach(card => {
+                // 필터로 숨겨진 카드(display:none)는 제외하고, 실제로 보이는 카드만 선택
+                if (isCardVisible(card) && card.style.display !== 'none') {
+                    const productId = card.getAttribute('data-product-id');
+                    if (!selectedCards.has(productId)) {
+                        selectedCards.add(productId);
+                        card.classList.add('selected');
+                        changed++;
+                    }
+                }
+            });
+            if (changed > 0) {
+                updateSelectionInfo();
+            }
+        }
+        
+        function toggleHighlight() {
+            highlightEnabled = !highlightEnabled;
+            const toggleBtn = document.getElementById('highlight-toggle');
+            const body = document.body;
+
+            if (highlightEnabled) {
+                // 하이라이트 켜기: 텍스트는 그대로 두고 스타일만 복원
+                body.classList.remove('no-highlight');
+                // 매칭 카드 테두리 복원
+                document.querySelectorAll('.product-card[data-matched="1"]').forEach(card => card.classList.add('matched'));
+                toggleBtn.textContent = '하이라이트 ON';
+                toggleBtn.classList.remove('off');
+            } else {
+                // 하이라이트 끄기: 텍스트 유지, 스타일만 제거
+                body.classList.add('no-highlight');
+                // 매칭 카드 테두리 제거
+                document.querySelectorAll('.product-card[data-matched="1"]').forEach(card => card.classList.remove('matched'));
+                toggleBtn.textContent = '하이라이트 OFF';
+                toggleBtn.classList.add('off');
+            }
+        }
+        
+        function toggleSelection(card) {
+            const productId = card.getAttribute('data-product-id');
+            
+            if (selectedCards.has(productId)) {
+                selectedCards.delete(productId);
+                card.classList.remove('selected');
+            } else {
+                selectedCards.add(productId);
+                card.classList.add('selected');
+            }
+            
+            updateSelectionInfo();
+        }
+        
+        function updateSelectionInfo() {
+            const selectedCount = selectedCards.size;
+            const deleteInfo = document.getElementById('delete-info');
+            const selectedCountSpan = document.getElementById('selected-count');
+            
+            if (selectedCount > 0) {
+                deleteInfo.style.display = 'block';
+                selectedCountSpan.textContent = selectedCount;
+            } else {
+                deleteInfo.style.display = 'none';
+            }
+        }
+        
+        function deleteSelectedCards() {
+            if (selectedCards.size === 0) {
+                return;
+            }
+            
+            // 선택된 카드들을 삭제 (확인 과정 없이 바로 삭제)
+            selectedCards.forEach(productId => {
+                const card = document.querySelector(`[data-product-id="${productId}"]`);
+                if (card) {
+                    card.style.animation = 'fadeOut 0.3s ease-out';
+                    setTimeout(() => {
+                        card.remove();
+                        updateTotalCount();
+                    }, 300);
+                }
+            });
+            
+            selectedCards.clear();
+            updateSelectionInfo();
+        }
+        
+        function updateTotalCount() {
+            // 보이는 카드만 집계
+            const remainingCards = Array.from(document.querySelectorAll('.product-card')).filter(c => c.style.display !== 'none').length;
+            const totalCountElement = document.getElementById('total-count');
+            totalCountElement.textContent = `총 상품 수: ${remainingCards}개`;
+        }
+
+        function setFilterMode(mode) {
+            filterMode = mode;
+            // 버튼 선택 상태 업데이트
+            const btnAll = document.getElementById('filter-all');
+            const btnOn = document.getElementById('filter-on');
+            const btnOff = document.getElementById('filter-off');
+            [btnAll, btnOn, btnOff].forEach(btn => btn && btn.classList.remove('selected'));
+            if (mode === 'all' && btnAll) btnAll.classList.add('selected');
+            if (mode === 'on' && btnOn) btnOn.classList.add('selected');
+            if (mode === 'off' && btnOff) btnOff.classList.add('selected');
+            applyFilter();
+        }
+
+        function applyFilter() {
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                const matched = card.getAttribute('data-matched') === '1';
+                if (filterMode === 'all') {
+                    card.style.display = '';
+                } else if (filterMode === 'on') {
+                    card.style.display = matched ? '' : 'none';
+                } else if (filterMode === 'off') {
+                    card.style.display = matched ? 'none' : '';
+                }
+            });
+            updateTotalCount();
+        }
+        
+        // 키보드 단축키 이벤트 리스너
+        document.addEventListener('keydown', function(event) {
+            // 입력 필드/편집 영역에서는 기본 Ctrl+A 동작을 유지
+            const tag = (event.target && event.target.tagName || '').toLowerCase();
+            const isEditable = event.target && (event.target.isContentEditable || tag === 'input' || tag === 'textarea' || tag === 'select');
+            
+            // Ctrl+A: 현재 페이지의 모든 상품 전체 선택(필터 적용)
+            if (!isEditable && event.ctrlKey && (event.key === 'a' || event.key === 'A')) {
+                event.preventDefault();
+                event.stopPropagation();
+                selectAllPageCards();
+                return;
+            }
+            if (event.key === 'Delete' || event.key === 'Del') {
+                deleteSelectedCards();
+            }
+            
+            // Escape 키로 선택 해제
+            if (event.key === 'Escape') {
+                selectedCards.forEach(productId => {
+                    const card = document.querySelector(`[data-product-id="${productId}"]`);
+                    if (card) {
+                        card.classList.remove('selected');
+                    }
+                });
+                selectedCards.clear();
+                updateSelectionInfo();
+            }
+            
+            // H 키로 하이라이트 토글 (키워드가 있는 경우에만)
+            if (event.key === 'h' || event.key === 'H') {
+                const toggleBtn = document.getElementById('highlight-toggle');
+                if (toggleBtn) {
+                    toggleHighlight();
+                }
+            }
+
+            // 1/2/3 단축키로 필터 변경 (키워드 있을 때만 동작)
+            if (true) {
+                if (event.key === '1') setFilterMode('all');
+                if (event.key === '2') setFilterMode('on');
+                if (event.key === '3') setFilterMode('off');
+            }
+        });
+        
+        function toggleTheme() {
+            try {
+                const el = document.documentElement;
+                const cur = el.getAttribute('data-theme') || 'light';
+                const next = cur === 'light' ? 'dark' : 'light';
+                el.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+            } catch (e) {}
+        }
+        
+        // 초기화 시 사용법 안내
+        console.log('💡 사용법:');
+        console.log('- 상품카드를 클릭하여 선택/해제');
+        console.log('- Delete 키를 눌러 선택된 상품들 삭제');
+    console.log('- Escape 키를 눌러 모든 선택 해제');
+    console.log('- H 키를 눌러 하이라이트 온/오프');
+    console.log('- Ctrl+A로 현재 페이지 전체 선택(필터 적용)');
+    console.log('- 1/2/3 키로 전체/ON만/OFF만 보기');
+
+    // 초기 필터 적용 (키워드가 있는 경우에만 컨트롤 보임)
+    setFilterMode('all');
+
+    // CSV 다운로드: 현재 보이는(필터/삭제 반영) 상품들만 내보내기
+    function exportVisibleToCSV() {
+        try {
+            const cards = Array.from(document.querySelectorAll('.product-card'))
+                .filter(function(c) { return c.style.display !== 'none'; });
+            if (cards.length === 0) {
+                alert('내보낼 상품이 없습니다.');
+                return;
+            }
+            // 헤더
+            const rows = [['상품명', '전체가격(판매가+배송비)']];
+            const getText = function(el, sel) {
+                const n = el.querySelector(sel);
+                return n ? (n.textContent || '').trim() : '';
+            };
+            cards.forEach(function(card) {
+                const name = getText(card, '.product-title');
+                const priceNum = parseInt(card.getAttribute('data-price') || '0', 10) || 0;
+                const deliveryNum = parseInt(card.getAttribute('data-delivery') || '0', 10) || 0;
+                const total = priceNum + deliveryNum;
+                rows.push([name, String(total)]);
+            });
+            // CSV 인코딩: 정규식 없이 안전하게(쉼표/따옴표/개행 포함 시 따옴표로 감싸고 내부 따옴표 이스케이프)
+            const esc = function(field) {
+                const s = String((field === null || field === undefined) ? '' : field);
+                const needsQuote = (s.indexOf('"') !== -1) || (s.indexOf(',') !== -1) || (s.indexOf('\n') !== -1) || (s.indexOf('\r') !== -1);
+                const doubled = s.split('"').join('""');
+                return needsQuote ? '"' + doubled + '"' : doubled;
+            };
+            const csv = rows.map(function(r) { return r.map(esc).join(','); }).join('\r\n');
+            // UTF-8 BOM 추가하여 Excel에서 한글/CSV 인코딩 문제 해결
+            const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+            const blob = new Blob([bom, csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            var now = new Date();
+            var pad = function(n) { return (n < 10 ? '0' + n : n); };
+            var ts = '' + now.getFullYear() + pad(now.getMonth() + 1) + pad(now.getDate()) + '_' + pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds());
+            a.href = url;
+            a.download = 'products_' + ts + '.csv';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function() {
+                URL.revokeObjectURL(url);
+                a.remove();
+            }, 0);
+        } catch (e) {
+            console.error('CSV 내보내기 실패:', e);
+            alert('CSV 내보내기 중 오류가 발생했습니다. 콘솔을 확인하세요.');
+        }
+    }
+    </script>
+</body>
+</html>
